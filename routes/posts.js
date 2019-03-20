@@ -38,8 +38,7 @@ router.post('/', async (req, res) => {
     if (!isValidPost(post)) {
       res.status(400).json({ errorMessage: 'Please provide text and user_id for the post.' });
     } else {
-      const { id: newPostId } = await db.insert(post);
-      const newPost = await db.getById(newPostId);
+      const newPost = await db.insert(post);
       res.status(201).json(newPost);
     }
   } catch (error) {
