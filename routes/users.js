@@ -3,6 +3,12 @@ const db = require('../data/helpers/userDb');
 
 const router = express.Router();
 
+function capitalizeUserName(req, res, next) {
+  const { name } = req.body;
+  req.body.name = name.charAt(0).toUpperCase() + name.slice(1);
+  next();
+}
+
 router.get('/', async (req, res) => {
   try {
     const users = await db.get();
@@ -44,7 +50,7 @@ router.get('/:id/posts', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', capitalizeUserName, async (req, res) => {
   try {
     const { body: user } = req;
     if (!user.name) {
@@ -59,7 +65,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', capitalizeUserName, async (req, res) => {
   try {
     const { id } = req.params;
     const { body: userUpdates } = req;
