@@ -28,6 +28,22 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.get('/:id/posts', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await db.getById(id);
+    if (!user) {
+      res.status(404).json({ message: 'The user with the specified ID does not exist.' });
+    } else {
+      const posts = await db.getUserPosts(id);
+      res.status(200).json(posts);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "The user's posts could not be retrieved." });
+  }
+});
+
 router.post('/', async (req, res) => {
   try {
     const { body: user } = req;
