@@ -10,9 +10,10 @@ const UserPosts = ({ userId, userStore }) => {
   const postsStore = useResource(endpoint);
 
   const renderUserPosts = () => {
+    // there is a lot of state to account for here, I would probably do this differently in the future
     if (userStore.isLoading || postsStore.isLoading) return <div>Loading...</div>;
 
-    if (!user) return <div>Invalid user ID</div>;
+    if (!user && !userStore.isLoading) return <div>Invalid user ID</div>;
 
     if (user && !postsStore.state.length) return <div>No posts for user</div>;
 
