@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../data/helpers/postDb');
+const userDb = require('../data/helpers/userDb');
 
 const router = express.Router();
 
@@ -38,8 +39,13 @@ router.post('/', async (req, res) => {
     if (!isValidPost(post)) {
       res.status(400).json({ errorMessage: 'Please provide text and user_id for the post.' });
     } else {
-      const newPost = await db.insert(post);
-      res.status(201).json(newPost);
+      const user = await userDb.getById(post.user_id);
+      if (!user) {
+        res.status(400).json({ message: 'The user with the specified ID does not exist.' });
+      } else {
+        const newPost = await db.insert(post);
+        res.status(201).json(newPost);
+      }
     }
   } catch (error) {
     console.log(error);
