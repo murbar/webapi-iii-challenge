@@ -39,6 +39,7 @@ router.post('/', async (req, res) => {
     if (!isValidPost(post)) {
       res.status(400).json({ errorMessage: 'Please provide text and user_id for the post.' });
     } else {
+      // might def add this check to a middleware on POST and PUT or in the validity check above
       const user = await userDb.getById(post.user_id);
       if (!user) {
         res.status(400).json({ message: 'The user with the specified ID does not exist.' });
